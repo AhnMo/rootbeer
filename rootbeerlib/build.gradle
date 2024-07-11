@@ -1,5 +1,5 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'maven-publish'
 
 android {
     compileSdkVersion compileSdkVer
@@ -37,4 +37,4 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:3.9.0'
 }
 
-apply from: '../gradle-mvn-push.gradle'
+//apply from: '../gradle-mvn-push.gradle'

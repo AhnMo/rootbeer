@@ -7,47 +7,48 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.scottyab.rootbeer.sample.databinding.ActivityMainBinding
 import com.scottyab.rootbeer.sample.extensions.hide
 import com.scottyab.rootbeer.sample.extensions.show
 import com.scottyab.rootbeer.sample.ui.RootItemAdapter
 import com.scottyab.rootbeer.sample.ui.ScopedActivity
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class MainActivity : ScopedActivity() {
+    private lateinit var binding: ActivityMainBinding
 
     private var infoDialog: AlertDialog? = null
     private val rootItemAdapter = RootItemAdapter()
     private val checkForRoot = CheckForRootWorker(this)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         initView()
         resetView()
     }
 
     private fun initView() {
-        setSupportActionBar(toolbar)
-        fab.setOnClickListener { checkForRoot() }
-        rootResultsRecycler.layoutManager = LinearLayoutManager(this)
-        rootResultsRecycler.adapter = rootItemAdapter
+        setSupportActionBar(binding.toolbar)
+        binding.fab.setOnClickListener { checkForRoot() }
+        binding.rootResultsRecycler.layoutManager = LinearLayoutManager(this)
+        binding.rootResultsRecycler.adapter = rootItemAdapter
     }
 
     private fun resetView() {
-        progressView.max = 100
-        progressView.beerProgress = 0
-        progressView.show()
-        isRootedTextView.hide()
+        binding.progressView.max = 100
+        binding.progressView.beerProgress = 0
+        binding.progressView.show()
+        binding.isRootedTextView.hide()
         rootItemAdapter.clear()
     }
 
     private fun checkForRoot() {
         resetView()
-        fab.hide()
+        binding.fab.hide()
 
         launch {
             val results = checkForRoot.invoke()
@@ -63,7 +64,7 @@ class MainActivity : ScopedActivity() {
         // this allows us to increment the progress bar for x number of times for each of the results
         // all in the effort to smooth the animation
         val multiplier = 10
-        progressView.max = results.size * multiplier
+        binding.progressView.max = results.size * multiplier
 
         launch {
             withContext(Dispatchers.IO) {
@@ -73,7 +74,7 @@ class MainActivity : ScopedActivity() {
                         delay(50)
                         // post the UI updates in the UI thread
                         withContext(Dispatchers.Main) {
-                            progressView.beerProgress = progressView.beerProgress + 1
+                            binding.progressView.beerProgress = binding.progressView.beerProgress + 1
 
                             // only add to the once we hit the multiplier
                             if (i == multiplier) {
@@ -134,9 +135,9 @@ class MainActivity : ScopedActivity() {
     }
 
     private fun onRootCheckFinished(isRooted: Boolean) {
-        fab.show()
-        isRootedTextView.update(isRooted = isRooted)
-        isRootedTextView.show()
+        binding.fab.show()
+        binding.isRootedTextView.update(isRooted = isRooted)
+        binding.isRootedTextView.show()
     }
 
     companion object {

@@ -1,4 +1,5 @@
 apply from: './dependencies.gradle'
+apply plugin: 'maven-publish'
 
 buildscript {
     apply from: './dependencies.gradle'
@@ -9,7 +10,6 @@ buildscript {
     }
     dependencies {
         classpath "com.android.tools.build:gradle:$gradlePluginVersion"
-        classpath "com.github.dcendents:android-maven-gradle-plugin:$mavenGradlePluginVersion"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     }
 }
@@ -20,7 +20,7 @@ def isReleaseBuild() {
 
 allprojects {
     version = VERSION_NAME
-    group = GROUP
+    //group = GROUP
 
     repositories {
         google()
@@ -31,10 +31,10 @@ allprojects {
 subprojects {
     // When updating the sdk version, please remember to change the circleci image to match
     // .circle/config.yml
-    ext.compileSdkVer = 30
-    ext.buildToolsVer = "30.0.0"
-    ext.minSdkVer = 15
-    ext.targetSdkVer = 30
+    ext.compileSdkVer = 32
+    ext.buildToolsVer = "30.0.3"
+    ext.minSdkVer = 21
+    ext.targetSdkVer = 32
     ext.ndkVersionVar = '22.1.7171670'
 
 }
